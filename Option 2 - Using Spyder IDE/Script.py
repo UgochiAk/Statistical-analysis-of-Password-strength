@@ -5,7 +5,7 @@
 # \date{April 2025}
 
 
-# Import necessary libraries
+# Import libraries
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -27,7 +27,7 @@ except pd.errors.ParserError:
     print("The file could not be parsed.")
     exit()
 
-# Ensure the column 'length' exists
+# Ensure column 'length' exists
 if 'length' not in data.columns:
     raise ValueError("The column 'length' does not exist in the dataset.")
 
@@ -57,7 +57,7 @@ print(f"Standard Deviation: {std_dev:.2f}")
 # Visualization
 plt.figure(figsize=(15, 6))
 
-# Plotting histogram (bar chart)
+# Plot histogram (bar chart)
 plt.subplot(1, 2, 1)
 value_counts = data['length'].value_counts().sort_index()  
 # Using correct column
@@ -73,13 +73,13 @@ plt.ylabel('Frequency')
 plt.show()
 
 ###########################################################################################################
-# Import necessary libraries
+# Import libraries
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
-# Load the dataset from a CSV file
+# Load the dataset from CSV file
 file_path = './common_passwords.csv'
 
 try:
@@ -95,7 +95,7 @@ except pd.errors.ParserError:
     print("The file could not be parsed.")
     exit()
 
-# Ensure the column 'length' exists
+# Ensure column 'length' exists
 if 'length' not in data.columns:
     raise ValueError("The column 'length' does not exist in the dataset.")
 
@@ -137,30 +137,29 @@ plt.legend()
 plt.title('Bar Chart of Length Frequencies')
 plt.xlabel('Password Length')
 plt.ylabel('Frequency')
-# Set the x-axis to start from 0
+# Set x-axis to start from 0
 plt.xlim(0, None)
 
-# To Create a box plot
+# Create box plot
 fig, ax = plt.subplots(figsize=(2.5, 1.25), dpi=300, facecolor='#ADD8E6', edgecolor='k', alpha=0.75)
 ax.set_facecolor('#E6F0FFBB')
 ax.boxplot(values, patch_artist=True, vert=False)  
-# Ensure vert=false for a horizontal box plot
 
-# Ensure the tick labels are visible
+# Ensure tick labels are visible
 ax.set_yticklabels(['Password \nLength'], fontsize=6.5, weight='bold')
 ax.tick_params(axis='x', labelsize=7)
 ax.tick_params(axis='y', labelsize=7)
 
-# Set the title and labels
+# Set title and labels
 ax.set_title(f'Box Plot of \nPassword Length', font='DejaVu Sans', fontsize=6.5, weight='bold')
 ax.set_xlabel('Count', fontsize=6.5, color='black', alpha=0.95, font='DejaVu Sans', weight='bold')
 
-# Adjust the position of the tick labels
+# Adjust position of tick labels
 plt.xticks(rotation=90)
 plt.yticks(rotation=0)
 
 import seaborn as sns
-# Creating a boxplot using Seaborn
+# Create boxplot using Seaborn
 plt.figure(figsize=(10, 6))
 sns.boxplot(x=values, color='skyblue', fliersize=5, linewidth=2, whis=1.5,
             boxprops=dict(facecolor='skyblue', edgecolor='black'),
@@ -172,44 +171,48 @@ plt.xlabel('Length')
 plt.show()
 
 ######################################################
-#Box Plot with Central Tendencies
+# Box Plot with Central Tendencies
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
-# Load dataset (update file path as needed)
+# Load dataset
 data = pd.read_csv('./common_passwords.csv')
 
 # Ensure the column of interest is named 'length'
 if 'length' not in data.columns:
     raise ValueError("The column 'value' does not exist in the dataset.")
 values = data['length']
-# Calculating central tendency measures
+
+# Calculate central tendency measures
 mean = np.mean(values)
 median = np.median(values)
-# Creating a boxplot using Matplotlib
+
+# Create boxplot using Matplotlib
 plt.figure(figsize=(12, 6), dpi=300)
 plt.boxplot(values, vert=False, patch_artist=True,
 boxprops=dict(facecolor='skyblue', color='black'),
 whiskerprops=dict(color='black'),
 capprops=dict(color='black'),
 medianprops=dict(color='red'))
-# Annotating central tendency measures
+
+# Annotate central tendency measures
 plt.axvline(mean, color='red', linestyle='dashed', linewidth=1, label=f'Mean: {mean:.2f}')
 plt.axvline(median, color='green', linestyle='dashed', linewidth=1, label=f'Median: {median:.2f}')
 plt.legend()
 plt.title('Boxplot of Values using Matplotlib')
 plt.xlabel('Length')
 plt.show()
+
 ###########################################################################################
-#Character composition
+# Character composition
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 import seaborn as sns
 
-# Load the dataset from the location
+# Load dataset
 file_path = './common_passwords.csv'
 df = pd.read_csv(file_path)
 
@@ -221,6 +224,7 @@ missing_columns = [col for col in char_types if col not in df.columns]
 if missing_columns:
     print(f"Missing columns: {missing_columns}")
 else:
+
     # Calculate character type composition
     char_ratios = df[char_types].div(df['length'], axis=0) * 100
 
@@ -238,7 +242,7 @@ else:
     ax.set_ylabel('Percentage (%)')
     ax.yaxis.set_major_formatter(PercentFormatter())
     
-    # Save the figure
+    # Save figure
     plt.savefig('char_type_presence.png')
     plt.show()
 
@@ -257,48 +261,43 @@ plt.show()
 plt.show()
 
 ##############################################################################
-#import tools
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-#load the dataset from the location
+# Load dataset
 file_path = './common_passwords.csv'
 df = pd.read_csv(file_path)
 
-
-# Compute basic statistics
-print(f"Mean Password Length: {df['length'].mean():.2f}")
-print(f"Median Password Length: {df['length'].median():.2f}")
-print(f"Mode Password Length(s): \n{df['length'].mode()}")
-
-# Histogram to visualize password length distribution
-plt.figure(figsize=(10, 5))
-df['length'].hist(bins=5, color="blue", edgecolor="black")
-plt.title("Distribution of Password Lengths")
-plt.xlabel("Password Length")
-plt.ylabel("Frequency")
-plt.grid(axis="y", linestyle="--", alpha=0.7)
-
-# Show the plot
-plt.show()
-
-# Set figure size
+# Correlation Matrix Heatmap
 plt.figure(figsize=(10, 10))
-
-# Set seaborn font scale
 sns.set(font_scale=1)
 
-# Ensure your dataframe is properly referenced
+# Create correlation matrix for selected features
 corr_matrix = df[['num_chars', 'num_digits', 'num_upper',
                   'num_lower', 'num_special', 'num_vowels', 'num_syllables']].corr()
 
-# Create heatmap
 sns.heatmap(data=corr_matrix, annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
-
-# Show plot
+plt.title("Correlation Matrix of Password Features")
 plt.show()
+
+
+# Check and compute entropy if not already present
+if 'entropy' not in df.columns:
+    def calculate_entropy(password):
+        charset = 0
+        if any(c.islower() for c in password): charset += 26
+        if any(c.isupper() for c in password): charset += 26
+        if any(c.isdigit() for c in password): charset += 10
+        if any(c in "!@#$%^&*()-_=+[{]}\|;:'\",<.>/?`~" for c in password): charset += 32
+        return len(password) * np.log2(charset) if charset > 0 else 0
+    df['entropy'] = df['password'].apply(calculate_entropy)
+
+# Calculate Pearson correlation
+correlation = df['length'].corr(df['entropy'], method='pearson')
+print(f"Pearson Correlation between Password Length and Entropy: {correlation:.3f}")
 
 ####################################################################################################
 import pandas as pd
@@ -357,10 +356,10 @@ colors = {
     "Very Strong": "#66B2FF"
 }
 
-# Count how many fall in each category
+# Count number that falls in each category
 strength_counts = df['strength'].value_counts().reindex(category_order).fillna(0).astype(int)
 
-#For the bar chart
+# For the bar chart
 plt.figure(figsize=(8, 4), dpi=300)
 bars = plt.bar(category_order, strength_counts[category_order], color=[colors[c] for c in category_order])
 plt.title("Password Strength Classification (Bar Chart)")
@@ -375,7 +374,7 @@ for bar in bars:
 plt.tight_layout()
 plt.show()
 
-#for the pie chart
+# For the pie chart
 fig, ax = plt.subplots(figsize=(6, 6), dpi=300)
 wedges, texts, autotexts = ax.pie(
     strength_counts[category_order],
@@ -404,7 +403,7 @@ bars = plt.bar(
     color=[colors[c] for c in category_order]
 )
 
-# Add count labels on top of bars
+# Adding count labels on top of bars
 for bar in bars:
     yval = bar.get_height()
     plt.text(
@@ -433,18 +432,18 @@ plt.tight_layout()
 plt.show()
 
 #####################################################################
-#Estimated crack time
+# Estimated crack time
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.ticker import FuncFormatter
 
-# Load the dataset
+# Load dataset from csv file
 file_path = './common_passwords.csv'
 df = pd.read_csv(file_path)
 
-# Function to calculate entropy
+# Entropy function
 def calculate_entropy(password):
     charset = 0
     if any(c.islower() for c in password): charset += 26
@@ -453,11 +452,11 @@ def calculate_entropy(password):
     if any(c in "!@#$%^&*()-_=+[{]}\|;:'\",<.>/?`~" for c in password): charset += 32
     return len(password) * np.log2(charset) if charset > 0 else 0
 
-# Function to estimate crack time in seconds
-def crack_time_seconds(entropy, guesses_per_second=1e10):  # adjust as needed
+# crack time in seconds function
+def crack_time_seconds(entropy, guesses_per_second=1e10):
     return 2 ** entropy / guesses_per_second
 
-# Function to convert time to human readable
+# convert time to human readable format function
 def human_readable_time(seconds):
     if seconds < 60:
         return f"{seconds:.1f}s"
@@ -470,7 +469,7 @@ def human_readable_time(seconds):
     else:
         return f"{seconds/31536000:.1f}yrs"
 
-# Classify based on crack time
+# categorize crack time function
 def crack_time_category(seconds):
     if seconds < 60:
         return "Instant"
@@ -478,37 +477,62 @@ def crack_time_category(seconds):
         return "Minutes"
     elif seconds < 86400:
         return "Days"
-    elif seconds < 31536000:
+    elif seconds < 604800:  # 7 days
         return "Weeks"
     else:
         return "Years"
 
-# Apply calculations to the dataset
+
 df['entropy'] = df['password'].apply(calculate_entropy)
+df['length'] = df['password'].apply(len)
 df['crack_time_sec'] = df['entropy'].apply(crack_time_seconds)
 df['crack_time_human'] = df['crack_time_sec'].apply(human_readable_time)
 df['crack_category'] = df['crack_time_sec'].apply(crack_time_category)
 
-# Summary for plotting
-summary = df['crack_category'].value_counts().reindex(['Instant', 'Minutes', 'Days', 'Weeks', 'Years'], fill_value=0)
 
-# Plotting
-colors = ['#6baed6', '#ff9999', '#ffcc99', '#66b3ff', '#3498db']
-fig, ax = plt.subplots(figsize=(10, 6))
+# Qualitative category summary
+category_order = ['Instant', 'Minutes', 'Days', 'Weeks', 'Years']
+summary = df['crack_category'].value_counts().reindex(category_order, fill_value=0)
+
+# Bar chart: Crack Time Categories (Qualitative)
+colors = ['#6baed6', '#a6c8f0', '#7cb0e7', '#5298de', '#297fd5']  
+
+fig, ax = plt.subplots(figsize=(10, 6), dpi=300)
 bars = ax.bar(summary.index, summary.values, color=colors)
 
-# Add percentages as labels
+# For count and percentage labels
 total = summary.sum()
 for bar in bars:
     height = bar.get_height()
     percentage = (height / total) * 100
-    ax.text(bar.get_x() + bar.get_width() / 2, height, f'{percentage:.1f}%', ha='center', va='bottom')
+    ax.text(bar.get_x() + bar.get_width() / 2, height + 5, f'{height}\n({percentage:.1f}%)',
+            ha='center', va='bottom', fontsize=10)
 
-# Plot styling
-ax.set_title('Password Crack Time Classification')
-ax.set_xlabel('Crack Time Category')
-ax.set_ylabel('Number of Passwords')
+
+ax.set_title('Estimated Crack Time by Category (Qualitative)', fontsize=14)
+ax.set_xlabel('Crack Time Category', fontsize=12)
+ax.set_ylabel('Number of Passwords', fontsize=12)
 plt.tight_layout()
-plt.savefig('password_crack_time_analysis.png')
+plt.savefig('crack_time_category_chart.png')
+plt.show()
+
+# Bar chart: Log-scale Crack Time (x-axis) vs Count
+df['log_crack_time'] = np.log10(df['crack_time_sec'].replace(0, np.nan)).fillna(0).round().astype(int)
+log_summary = df['log_crack_time'].value_counts().sort_index()
+
+fig2, ax2 = plt.subplots(figsize=(10, 6), dpi=300)
+bar2 = ax2.bar(log_summary.index.astype(str), log_summary.values, color='#297fd5')
+
+# Add labels
+for bar in bar2:
+    height = bar.get_height()
+    ax2.text(bar.get_x() + bar.get_width() / 2, height + 5, f'{height}',
+             ha='center', va='bottom', fontsize=9)
+
+ax2.set_title('Estimated Crack Time (Log Scale)', fontsize=14)
+ax2.set_xlabel('Log10(Estimated Crack Time in Seconds)', fontsize=12)
+ax2.set_ylabel('Number of Passwords', fontsize=12)
+plt.tight_layout()
+plt.savefig('crack_time_log_chart.png')
 plt.show()
 
