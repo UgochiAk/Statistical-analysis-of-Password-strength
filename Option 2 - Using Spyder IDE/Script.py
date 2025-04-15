@@ -5,13 +5,13 @@
 # \date{April 2025}
 
 
-# Import libraries
+# Import necessary libraries
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
-# Load dataset from CSV file
+# Load the dataset from a CSV file
 file_path = './common_passwords.csv'
 
 try:
@@ -79,7 +79,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
-# Load dataset from CSV file
+# Load the dataset from a CSV file
 file_path = './common_passwords.csv'
 
 try:
@@ -95,7 +95,7 @@ except pd.errors.ParserError:
     print("The file could not be parsed.")
     exit()
 
-# Ensure column 'length' exists
+# Ensure the column 'length' exists
 if 'length' not in data.columns:
     raise ValueError("The column 'length' does not exist in the dataset.")
 
@@ -140,7 +140,7 @@ plt.ylabel('Frequency')
 # Set the x-axis to start from 0
 plt.xlim(0, None)
 
-# To Create box plot
+# To Create a box plot
 fig, ax = plt.subplots(figsize=(2.5, 1.25), dpi=300, facecolor='#ADD8E6', edgecolor='k', alpha=0.75)
 ax.set_facecolor('#E6F0FFBB')
 ax.boxplot(values, patch_artist=True, vert=False)  
@@ -151,7 +151,7 @@ ax.set_yticklabels(['Password \nLength'], fontsize=6.5, weight='bold')
 ax.tick_params(axis='x', labelsize=7)
 ax.tick_params(axis='y', labelsize=7)
 
-# Set title and labels
+# Set the title and labels
 ax.set_title(f'Box Plot of \nPassword Length', font='DejaVu Sans', fontsize=6.5, weight='bold')
 ax.set_xlabel('Count', fontsize=6.5, color='black', alpha=0.95, font='DejaVu Sans', weight='bold')
 
@@ -171,6 +171,38 @@ plt.title('Boxplot of Length using Seaborn')
 plt.xlabel('Length')
 plt.show()
 
+######################################################
+#Box Plot with Central Tendencies
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+# Load dataset (update file path as needed)
+data = pd.read_csv('./common_passwords.csv')
+
+# Ensure the column of interest is named 'length'
+if 'length' not in data.columns:
+    raise ValueError("The column 'value' does not exist in the dataset.")
+values = data['length']
+# Calculating central tendency measures
+mean = np.mean(values)
+median = np.median(values)
+# Creating a boxplot using Matplotlib
+plt.figure(figsize=(12, 6), dpi=300)
+plt.boxplot(values, vert=False, patch_artist=True,
+boxprops=dict(facecolor='skyblue', color='black'),
+whiskerprops=dict(color='black'),
+capprops=dict(color='black'),
+medianprops=dict(color='red'))
+# Annotating central tendency measures
+plt.axvline(mean, color='red', linestyle='dashed', linewidth=1, label=f'Mean: {mean:.2f}')
+plt.axvline(median, color='green', linestyle='dashed', linewidth=1, label=f'Median: {median:.2f}')
+plt.legend()
+plt.title('Boxplot of Values using Matplotlib')
+plt.xlabel('Length')
+plt.show()
+###########################################################################################
 #Character composition
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -206,7 +238,7 @@ else:
     ax.set_ylabel('Percentage (%)')
     ax.yaxis.set_major_formatter(PercentFormatter())
     
-    # Save figure
+    # Save the figure
     plt.savefig('char_type_presence.png')
     plt.show()
 
@@ -400,4 +432,83 @@ plt.legend(handles=patches, title="Strength %", loc='center left', bbox_to_ancho
 plt.tight_layout()
 plt.show()
 
+#####################################################################
+#Estimated crack time
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from matplotlib.ticker import FuncFormatter
+
+# Load the dataset
+file_path = './common_passwords.csv'
+df = pd.read_csv(file_path)
+
+# Function to calculate entropy
+def calculate_entropy(password):
+    charset = 0
+    if any(c.islower() for c in password): charset += 26
+    if any(c.isupper() for c in password): charset += 26
+    if any(c.isdigit() for c in password): charset += 10
+    if any(c in "!@#$%^&*()-_=+[{]}\|;:'\",<.>/?`~" for c in password): charset += 32
+    return len(password) * np.log2(charset) if charset > 0 else 0
+
+# Function to estimate crack time in seconds
+def crack_time_seconds(entropy, guesses_per_second=1e10):  # adjust as needed
+    return 2 ** entropy / guesses_per_second
+
+# Function to convert time to human readable
+def human_readable_time(seconds):
+    if seconds < 60:
+        return f"{seconds:.1f}s"
+    elif seconds < 3600:
+        return f"{seconds/60:.1f}min"
+    elif seconds < 86400:
+        return f"{seconds/3600:.1f}hr"
+    elif seconds < 31536000:
+        return f"{seconds/86400:.1f}days"
+    else:
+        return f"{seconds/31536000:.1f}yrs"
+
+# Classify based on crack time
+def crack_time_category(seconds):
+    if seconds < 60:
+        return "Instant"
+    elif seconds < 3600:
+        return "Minutes"
+    elif seconds < 86400:
+        return "Days"
+    elif seconds < 31536000:
+        return "Weeks"
+    else:
+        return "Years"
+
+# Apply calculations to the dataset
+df['entropy'] = df['password'].apply(calculate_entropy)
+df['crack_time_sec'] = df['entropy'].apply(crack_time_seconds)
+df['crack_time_human'] = df['crack_time_sec'].apply(human_readable_time)
+df['crack_category'] = df['crack_time_sec'].apply(crack_time_category)
+
+# Summary for plotting
+summary = df['crack_category'].value_counts().reindex(['Instant', 'Minutes', 'Days', 'Weeks', 'Years'], fill_value=0)
+
+# Plotting
+colors = ['#6baed6', '#ff9999', '#ffcc99', '#66b3ff', '#3498db']
+fig, ax = plt.subplots(figsize=(10, 6))
+bars = ax.bar(summary.index, summary.values, color=colors)
+
+# Add percentages as labels
+total = summary.sum()
+for bar in bars:
+    height = bar.get_height()
+    percentage = (height / total) * 100
+    ax.text(bar.get_x() + bar.get_width() / 2, height, f'{percentage:.1f}%', ha='center', va='bottom')
+
+# Plot styling
+ax.set_title('Password Crack Time Classification')
+ax.set_xlabel('Crack Time Category')
+ax.set_ylabel('Number of Passwords')
+plt.tight_layout()
+plt.savefig('password_crack_time_analysis.png')
+plt.show()
 
