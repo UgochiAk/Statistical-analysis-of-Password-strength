@@ -27,6 +27,11 @@ except pd.errors.ParserError:
     print("The file could not be parsed.")
     exit()
 
+#Print summarized info and description of the dataset
+print(data.head())
+print(data.describe())
+print(data.info())
+
 # Ensure column 'length' exists
 if 'length' not in data.columns:
     raise ValueError("The column 'length' does not exist in the dataset.")
